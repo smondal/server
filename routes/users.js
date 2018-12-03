@@ -28,7 +28,7 @@ router.post("/authenticate", function(req, res, next) {
       res.send(user)    
     }
     else{
-      res.send({"error": "Unauthorized Access"}, 404)
+      res.send("Unauthorized Access", 404)
     }
   })
 });
