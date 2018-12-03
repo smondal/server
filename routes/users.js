@@ -4,27 +4,33 @@ var User = require('../app/models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-
- 
-
   res.send('respond with a resource');
 });
 
 router.post('/register', function (req, res, next) {
-  var newUser = User({
-    name: 'Peter Quill',
-    username: 'starlord55',
-    password: 'password',
-    admin: true
+  console.log(req.body)
+  var newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    username: req.body.username,
   });
-
-  // save the user
+  newUser.setPassword(req.body.password);
   newUser.save(function (err) {
     if (err) throw err;
-    console.log('User created!');
   });
+  res.send({ user: newUser.toAuthJSON() });
+});
 
-  res.send('respond with a resource');
+
+router.post("/authenticate", function(req, res, next) {
+  User.findOne({ username: req.body.username }).then((user) => {
+    if (user && user.validatePassword(req.body.password)){
+      res.send(user)    
+    }
+    else{
+      res.send({"error": "Unauthorized Access"}, 404)
+    }
+  })
 });
 
 module.exports = router;
