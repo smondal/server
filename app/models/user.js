@@ -1,17 +1,21 @@
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
 var crypto = require('crypto');
+var Role = require("./role")
 
 var Schema = mongoose.Schema;
 
 // create a schema
 var userSchema = new Schema({
-    name: String,
-    email: String,
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    salt: String,
-    created_at: Date,
-    updated_at: Date
+	name: String,
+	email: String,
+	username: String, //{ type: String, required: true, unique: true },
+	password: String, //{ type: String, required: true },
+	salt: String,
+	role_id: String,
+	created_at: Date,
+	updated_at: Date
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -20,9 +24,21 @@ userSchema.methods.setPassword = function (password) {
 };
 
 userSchema.methods.validatePassword = function (password) {
-    const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-    return this.password === hash;
+	const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+	return this.password === hash;
 };
+
+userSchema.methods.is_admin =function() {
+   Role.findOne({_id: this.role_id}, function(err, res) {
+			if(res.name == "admin"){
+				return true;
+			}
+			else{
+				return false;
+			}
+   }) 
+}
+
 // the schema is useless so far
 // we need to create a model using it
 var User = mongoose.model('User', userSchema);
