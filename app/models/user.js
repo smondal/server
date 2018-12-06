@@ -28,17 +28,6 @@ userSchema.methods.validatePassword = function (password) {
 	return this.password === hash;
 };
 
-userSchema.methods.is_admin =function() {
-   Role.findOne({_id: this.role_id}, function(err, res) {
-			if(res.name == "admin"){
-				return true;
-			}
-			else{
-				return false;
-			}
-   }) 
-}
-
 // the schema is useless so far
 // we need to create a model using it
 var User = mongoose.model('User', userSchema);
