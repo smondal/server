@@ -11,20 +11,32 @@ router.get('/', function(req, res, next) {
 router.post('/register',  async function (req, res, next) {
   console.log(req.body)
   var newUser = new User(req.body)
-  newUser.role_id = await Role.findOne({"name": "customer" }).id
+  role = await Role.findOne({"name": "customer" })
+  newUser.role_id = role.id;
   newUser.setPassword(req.body.password);
   newUser.save(function (err) {
-    if (err) throw err;
+    if (err)
+    {
+      res.send("Something wrong", 422);
+    }
+    else{
+      res.send({ user: newUser });
+    }
   });
-  res.send({ user: newUser });
+
 });
 
 
 router.post("/authenticate", async function(req, res, next) {
   user = await User.findOne({ username: req.body.username })
-  role = await Role.findOne({id: user.role_id})
-  obj = { name: user.name, email: user.email, role: role.name}
-  res.send(obj)
+  if(user){
+    role = await Role.findOne({id: user.role_id})
+    obj = { name: user.name, email: user.email, role: role.name}
+    res.send(obj)
+  }else{
+    res.send("Username and password are incorect", 422)
+  }
+
 });
 
 module.exports = router;
