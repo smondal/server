@@ -6,13 +6,14 @@ mongoose.Promise = require('bluebird');
 
 // create a schema
 var RoleSchema = new Schema({
+	id: Number,
 	name: String,
 	description: String,
 	priority: Number
 });
 
 RoleSchema.statics.search = function (name, cb) {
-	return this.where("name", new RegExp(name, 'i')).exec(cb)
+  return this.where("name", new RegExp(name, 'i')).exec(cb)
 } 
 
 var Role = mongoose.model('Role', RoleSchema);

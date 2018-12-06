@@ -5,7 +5,10 @@ var Role = require('../app/models/role')
 var data = [{
   name: "Sandip",
   username: "admin",
-  email: "sandip@gmail.com"
+  email: "sandip@gmail.com",
+  role_id: 1,
+  password: "sandip",
+  salt: "123"
  }];
 
 var UsersSeeder = Seeder.extend({
@@ -13,17 +16,7 @@ var UsersSeeder = Seeder.extend({
     return Model.countDocuments().exec().then(count => count === 0);
   },
   run: function () {
-    var results = []
-    data.forEach(function(data) {
-      user_data = new Model(data)
-      user_data.setPassword("password");
-      console.log(user_data);
-      user_data.save(function (err) {
-          // console.log(err)
-      })
-    })
-
-  //  return Model.create(data);
+    return Model.create(data);
   }
 });
 

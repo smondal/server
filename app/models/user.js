@@ -19,8 +19,8 @@ var userSchema = new Schema({
 });
 
 userSchema.methods.setPassword = function (password) {
-    this.salt = crypto.randomBytes(16).toString('hex');
-    this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+  this.salt = crypto.randomBytes(16).toString('hex');
+  this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
 userSchema.methods.validatePassword = function (password) {
@@ -28,8 +28,6 @@ userSchema.methods.validatePassword = function (password) {
 	return this.password === hash;
 };
 
-// the schema is useless so far
-// we need to create a model using it
 var User = mongoose.model('User', userSchema);
 
 // make this available to our users in our Node applications
