@@ -10,11 +10,11 @@ var RoleSchema = new Schema({
 	name: String,
 	description: String,
 	priority: Number
-});
+}, { id: false });
 
 RoleSchema.statics.search = function (name, cb) {
   return this.where("name", new RegExp(name, 'i')).exec(cb)
-} 
+}
 
 var Role = mongoose.model('Role', RoleSchema);
 

@@ -9,8 +9,9 @@ var ProductSchema = new Schema({
   name: String,
   description: String,
   type: String,
-  Price: Number
+  price: Number
 });
+
 var Product = mongoose.model('Product', ProductSchema);
 
 module.exports = Product;
