@@ -34,7 +34,7 @@ router.post("/authenticate", async function(req, res, next) {
   user = await User.findOne({ username: req.body.username })
   if(user){
     role = await Role.findOne({id: user.role_id})
-    var token = jwt.sign({userID: user.id}, 'todo-app-super-shared-secret', {expiresIn: '2h'});
+    var token = jwt.sign({userID: user.id, role: role.name}, 'todo-app-super-shared-secret', {expiresIn: '2h'});
     obj = { name: user.name, email: user.email, role: role.name, token: token};
     res.send(obj)
   }else{
