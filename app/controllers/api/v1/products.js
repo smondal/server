@@ -3,15 +3,11 @@ var router = express.Router();
 var Product = require('../../../models/product');
 var verify_token = require('../../../middleware/verify_token')
 
-console.log(verify_token);
-
-router.get('/', verify_token,  function (req, res, next) {
+router.get('/',  function (req, res, next) {
 	Product.find({}, function(err, products){
 		res.send(products)
 	})
 });
-
-
 
 router.post('/', verify_token, function(req, res, next){
   if(req.role === 'admin'){
@@ -23,10 +19,7 @@ router.post('/', verify_token, function(req, res, next){
   }else{
     res.status(401).send("Unauthorized Access");
   }
-
-
 });
-
 
 router.delete('/:id', verify_token, function(req,res, next){
   if(req.role === 'admin'){
@@ -36,7 +29,6 @@ router.delete('/:id', verify_token, function(req,res, next){
   else{
     res.status(401).send("Unauthorized Access");
   }
-	// res.send("successfully delete product", 200);
 });
 
 module.exports = router;
