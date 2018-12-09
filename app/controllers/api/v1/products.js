@@ -10,12 +10,19 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function(req, res, next){
 	let newProduct = new Product(req.body);
-
 	newProduct.save(function(err) {
-		if (err) throw err;
+    if (err) res.send(err);
+    else res.send(newProduct);
 	})
-	res.send(newProduct);
+
 });
 
+
+router.delete('/:id',function(req,res, next){
+	console.log(req.params.id);
+	Product.find({_id:req.params.id }).remove().exec();
+	res.send(req.params.id);
+	// res.send("successfully delete product", 200);
+});
 
 module.exports = router;
