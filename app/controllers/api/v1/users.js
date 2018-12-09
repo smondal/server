@@ -1,4 +1,6 @@
 var express = require('express');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 var router = express.Router();
 var User = require('../../../models/user');
 var Role = require('../../../models/role');
@@ -20,6 +22,7 @@ router.post('/register',  async function (req, res, next) {
       res.send("Something wrong", 422);
     }
     else{
+
       res.send({ user: newUser });
     }
   });
@@ -31,7 +34,8 @@ router.post("/authenticate", async function(req, res, next) {
   user = await User.findOne({ username: req.body.username })
   if(user){
     role = await Role.findOne({id: user.role_id})
-    obj = { name: user.name, email: user.email, role: role.name}
+    var token = jwt.sign({userID: user.id}, 'todo-app-super-shared-secret', {expiresIn: '2h'});
+    obj = { name: user.name, email: user.email, role: role.name, token: token};
     res.send(obj)
   }else{
     res.send("Username and password are incorect", 422)

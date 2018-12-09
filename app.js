@@ -4,7 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-var cors = require('cors')
+var cors = require('cors');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+
 
 mongoose.connect('mongodb://localhost/stockpile');
 
